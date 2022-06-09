@@ -1,0 +1,10 @@
+---
+
+github:
+  token: ${{GITHUB_TOKEN}}
+defaults:
+  org: applicreation
+  name: harmony-docs
+  branch: main
+  directory: docs
+  filename: README.md

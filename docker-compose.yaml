@@ -1,0 +1,24 @@
+---
+
+services:
+  proxy:
+    image: ghcr.io/applicreation/harmony-proxy:v0
+    ports:
+      - 80:80
+  core:
+    image: ghcr.io/applicreation/harmony-core:v0
+    restart: on-failure
+    volumes:
+      - ./.harmony/core:/root/.harmony:ro
+  docs:
+    image: node:lts-alpine
+    command:
+      - npm
+      - run
+      - dev
+    working_dir: /app
+    env_file:
+      - ./.env
+    volumes:
+      - ./.harmony/docs:/root/.harmony:ro
+      - ./app:/app

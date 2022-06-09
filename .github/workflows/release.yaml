@@ -1,0 +1,10 @@
+---
+
+name: Release
+on:
+  release:
+    types:
+      - published
+jobs:
+  docker-release:
+    uses: applicreation/github-workflows/.github/workflows/docker-release.yaml@v1
