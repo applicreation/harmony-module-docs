@@ -18,7 +18,7 @@ services:
       - dev
     working_dir: /app
     env_file:
-      - ./.env
+      - ./.harmony/docs/.env
     volumes:
       - ./.harmony/docs:/root/.harmony:ro
       - ./app:/app

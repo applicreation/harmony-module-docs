@@ -6,7 +6,8 @@ This is a docs module to be used with Harmony.
 
 ## Prerequisites
 
-The only tool required is [Docker Desktop](https://www.docker.com/products/docker-desktop).
+* [Docker Desktop](https://www.docker.com/products/docker-desktop)
+* [git-secret](https://git-secret.io/installation)
 
 ## Usage
 
@@ -38,5 +39,11 @@ modules:
 ## Development
 
 ```shell
+git secret init
+git secret reveal
+```
+
+```shell
+docker compose run --rm docs npm install
 docker compose up
 ```
