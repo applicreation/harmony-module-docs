@@ -1,4 +1,6 @@
 ---
 
+github:
+  token: ${{GITHUB_TOKEN}}
 modules:
   - id: docs

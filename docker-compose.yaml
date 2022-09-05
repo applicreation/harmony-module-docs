@@ -8,6 +8,8 @@ services:
   core:
     image: ghcr.io/applicreation/harmony-core:v0
     restart: on-failure
+    env_file:
+      - ./.harmony/core/.env
     volumes:
       - ./.harmony/core:/root/.harmony:ro
   docs:
