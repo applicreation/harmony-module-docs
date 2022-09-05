@@ -1,5 +1,6 @@
 const fs = require('fs')
 const express = require('express')
+const cors = require('cors')
 const YAML = require('yaml')
 const {graphql} = require('@octokit/graphql')
 const MarkdownIt = require('markdown-it')
@@ -7,6 +8,8 @@ const harmony = require('./harmony.json')
 
 const app = express()
 const port = 80
+
+app.use(cors())
 
 app.set('view engine', 'pug')
 
@@ -16,16 +19,26 @@ app.get('/module/docs/harmony.json', async (req, res) => {
 })
 
 app.get('/module/docs', async (req, res) => {
+    const config = getConfig()
+    const markdownRepo = config.defaults.org + '/' + config.defaults.name
+    const markdownFilename = config.defaults.directory + '/README.md'
+
     res.render('index', {
-        html: await render('README.md'),
+        markdownRepo,
+        markdownFilename,
+        html: await render(markdownFilename),
     })
 })
 
 app.get('/module/docs/*', async (req, res) => {
-    const filename = req.path.replace('/module/docs/', '')
+    const config = getConfig()
+    const markdownRepo = config.defaults.org + '/' + config.defaults.name
+    const markdownFilename = config.defaults.directory + '/' + req.path.replace('/module/docs/', '')
 
     res.render('index', {
-        html: await render(filename),
+        markdownRepo,
+        markdownFilename,
+        html: await render(markdownFilename),
     })
 })
 
@@ -34,8 +47,8 @@ app.listen(port, () => {
 })
 
 async function render(filename) {
-    const md = new MarkdownIt()
     const config = getConfig()
+    const md = new MarkdownIt()
     const graphqlWithAuth = graphql.defaults({
         headers: {
             authorization: `token ${config.github.token}`,
@@ -43,15 +56,15 @@ async function render(filename) {
     })
 
     const {repository} = await graphqlWithAuth(`
-    {
-    repository(owner: "${config.defaults.org}", name: "${config.defaults.name}") {
-    object(expression: "${config.defaults.branch}:${config.defaults.directory}/${filename}") {
-      ... on Blob {
-              text
+        {
+            repository(owner: "${config.defaults.org}", name: "${config.defaults.name}") {
+                object(expression: "${config.defaults.branch}:${filename}") {
+                    ... on Blob {
+                        text
+                    }
+                }
             }
-    }
-  }
-}
+        }
     `)
 
     let text = null
