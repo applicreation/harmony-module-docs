@@ -1,7 +1,7 @@
 {
   "name": "Docs",
   "description": "Harmony docs module.",
-  "version": "v0.2.0",
+  "version": "v0.4.1",
   "github": {
     "owner": "applicreation",
     "name": "harmony-module-docs"
